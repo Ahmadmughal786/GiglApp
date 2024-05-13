@@ -7,11 +7,16 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Modal,
+  StatusBar,
 } from 'react-native';
 import gigStyle from './gigsStyles';
 import StepIndicator from 'react-native-step-indicator';
 import {AirbnbRating} from 'react-native-ratings';
 import Button from '../../components/Button';
+import {useNavigation} from '@react-navigation/native';
+import DatePicker from 'react-native-modern-datepicker';
+import {getToday, getFormatedDate} from 'react-native-modern-datepicker';
 
 const customStyles = {
   stepIndicatorSize: 25,
@@ -39,6 +44,20 @@ const customStyles = {
 };
 
 const GigsDetails = () => {
+  const today = new Date();
+  const startDate = getFormatedDate(
+    today.setDate(today.getDate() + 1),
+    'YYYY/MM/DD',
+  );
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState('2024/05/13');
+
+  const handleOnPress = () => {
+    setOpen(!open);
+  };
+  const handleChange = propDate => {
+    setDate(propDate);
+  };
   const [currentStep, setCurrentStep] = useState(0);
 
   const [dummyData, setDummyData] = useState([
@@ -61,6 +80,7 @@ const GigsDetails = () => {
   const img = require('../../assets/icons/details-profile-pic.png');
   const header = require('../../assets/images/gigs-details-header.png');
   const locIcon = require('../../assets/icons/location.png');
+  const navigation = useNavigation();
 
   const onNextPress = () => {
     // Move to the next step
@@ -92,7 +112,29 @@ const GigsDetails = () => {
         </View>
         <View style={gigStyle.time_container}>
           <Text style={{color: '#000000'}}>ID</Text>
-          <Text style={{color: '#000000', marginLeft: 20}}>Time - Date</Text>
+          <TouchableOpacity onPress={handleOnPress}>
+            <Text style={{color: '#000000', marginLeft: 20}}>Time - Date</Text>
+          </TouchableOpacity>
+
+          {/* Modal  */}
+          <View style={styles.modal_container}>
+            <Modal animationType="slide" transparent={true} visible={open}>
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <DatePicker
+                    mode="calendar"
+                    selected={date}
+                    minimumDate={startDate}
+                    onDateChanged={handleChange}
+                  />
+                  <TouchableOpacity onPress={handleOnPress}>
+                    <Text>Close</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+            <StatusBar style="auto" />
+          </View>
         </View>
         <Text style={gigStyle.description}>
           Description description description description description
@@ -121,6 +163,35 @@ const GigsDetails = () => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  modal_container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    width: '90%',
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    textShadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+});
 
 export default GigsDetails;

@@ -20,6 +20,7 @@ import SecondScreen from '../screens/on-boarding/SecondScreen';
 import ThirdScreen from '../screens/on-boarding/ThirdScreen';
 import FirstScreen from '../screens/on-boarding/FirstScreen';
 import GigsDetails from '../screens/gig-details/GigsDetails';
+// import Calendar from '../screens/Calendar';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -194,6 +195,11 @@ const AppRoutes = () => {
           options={{headerShown: false}}
           component={NewPassword}
         />
+        {/* <Stack.Screen
+          name="Calendar"
+          options={{headerShown: false, headerTitleAlign: 'center'}}
+          component={Calendar}
+        /> */}
         <Stack.Screen
           name="Chats"
           component={Chats}
